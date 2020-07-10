@@ -8,6 +8,10 @@ require('@babel/polyfill')
 
 module.exports = (env, opts) => {
     const config = {
+        // 가져오기 확장자 생략 가능
+        resolve: {
+            extensions: ['.js', '.vue']
+        },
         // 파일을 읽어들이기 시작하는 진입
         // `__dirname`은 현재 파일의 위치를 알려주는 NodeJS 전역 변수
         entry: {
@@ -38,7 +42,8 @@ module.exports = (env, opts) => {
                     test: /\.css$/,
                     use: [
                     'vue-style-loader',
-                    'css-loader'
+                    'css-loader',
+                    'postcss-loader'
                     ]
                 },
                 {
@@ -46,6 +51,7 @@ module.exports = (env, opts) => {
                     use: [
                         'vue-style-loader',
                         'css-loader',
+                        'postcss-loader',
                         'sass-loader'
                     ]
                 }
@@ -58,12 +64,14 @@ module.exports = (env, opts) => {
             }),
             new VueLoaderPlugin(),
             // assets 디렉터리의 내용을 `dist` 디렉터리에 복사합니다.
-            new CopyPlugin([
-                { 
-                    from: 'assets/',
-                    to: ''
-                }
-            ])
+            new CopyPlugin({
+                patterns: [
+                    { 
+                        from: 'assets/',
+                        to: ''
+                    }
+                ]
+            })
         ]
     }
 
