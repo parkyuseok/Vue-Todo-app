@@ -7,6 +7,10 @@
 </template>
 
 <script>
+// 일반적으로 node_modules에서 가져오는 것은 상단에 배치하는 것이 좋다.(상대 경로랑 구분)
+import lowdb from 'lowdb'
+import LocalStorage from 'lowdb/adapters/LocalStorage'
+
 import TodoCreator from './TodoCreator' //TodoCreator라는 이름으로 가져온다.
 import TodoItem from './TodoItem'
 
@@ -16,6 +20,29 @@ export default {
         // 가져온 컴포넌트를 연결해준다.
         TodoCreator,
         TodoItem
+    },
+    data () {
+        return {
+            db: null
+        }
+    },
+    // TodoApp.vue라는 컴포넌트가 생성되고 나서 직후에 바로 호출된다.
+    created () {
+        this.initDB()
+    },
+    methods: {
+        initDB () {
+            const adapter = new LocalStorage('todo-app') //DB
+            // lowdb에 연결
+            this.db = lowdb(adapter)
+
+            // Local DB 초기화
+            this.db
+                .defaults({
+                    todos: [] //collection
+            })
+            .write()
+        }
     }
 }
 </script>
