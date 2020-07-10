@@ -58,5 +58,11 @@ module.exports = {
             ]
         }),
         new CleanWebpackPlugin()
-    ]
+    ],
+    devServer: {
+        open: false,
+        hot: true
+    },
+    //(개발용)build 시간이 최대한 줄어들고, 디버깅이 가능해진다. (단점: 용량이 커짐)
+    devtool: 'eval'
 }
