@@ -8,9 +8,10 @@
 
 <script>
 // 일반적으로 node_modules에서 가져오는 것은 상단에 배치하는 것이 좋다.(상대 경로랑 구분)
-import lowdb from 'lowdb'
+import lowdb from 'lowdb' // https://github.com/typicode/lowdb
 import LocalStorage from 'lowdb/adapters/LocalStorage'
-
+import cryptoRandomString from 'crypto-random-string' // https://github.com/sindresorhus/crypto-random-string
+// 상대경로로 작성해서 가져오는 것
 import TodoCreator from './TodoCreator' //TodoCreator라는 이름으로 가져온다.
 import TodoItem from './TodoItem'
 
@@ -42,6 +43,20 @@ export default {
                     todos: [] //collection
             })
             .write()
+        },
+        createTodo (title) {
+            const newTodo = {
+                id: cryptoRandomString({ length: 10 }),
+                title, //title: title
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                done: false
+            }
+
+            this.db
+            .get('todos') // lodash
+            .push(newTodo) // lodash
+            .wrie() // lowdb
         }
     }
 }
