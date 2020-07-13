@@ -21,6 +21,8 @@ import lowdb from 'lowdb' // https://github.com/typicode/lowdb
 import LocalStorage from 'lowdb/adapters/LocalStorage'
 import cryptoRandomString from 'crypto-random-string' // https://github.com/sindresorhus/crypto-random-string
 import _cloneDeep from 'lodash/cloneDeep'
+import _find from 'lodash/find'
+import _assign from 'lodash/assign'
 // 상대경로로 작성해서 가져오는 것
 import TodoCreator from './TodoCreator' //TodoCreator라는 이름으로 가져온다.
 import TodoItem from './TodoItem'
@@ -54,7 +56,7 @@ export default {
             if (hasTodos) {
                 // this.db.getState().todos는 db에 있는 모든 내용을 가지고 와라. 그 중에 나는 todos만 필요하다
                 //_cloneDeep은 복사행위를 가능하게 해주는 lodash에서 제공하는 메소드이다. 
-                // 사용하는 이유는 안에 있는 참조관계도 복사하기 때문에 문제가 생기기 때문에 
+                // 사용하는 이유는 todos는 배열이기 때문에 안에 있는 참조관계도 복사하기 때문에 문제가 생기기 때문에 
                 // cloneDeep을 통해서 todos 내부에 있는 모든 참조관계들을 다 제거하고 복사해서 todos에서 활용하겠다는 의미로 깊은 복사를한다.
                 this.todos = _cloneDeep(this.db.getState().todos)
             } else {
@@ -76,13 +78,23 @@ export default {
                 done: false
             }
 
+            // Create DB
             this.db
-            .get('todos') // lodash
-            .push(newTodo) // lodash
-            .write() // lowdb
+                .get('todos') // lodash
+                .push(newTodo) // lodash
+                .write() // lowdb
+            // Create Client
+            this.todos.push(newTodo)
         },
-        updateTodo () {
-            console.log('Update Todo!')
+        updateTodo (todo, value) {
+            this.db
+                .get('todos')
+                .find({ id: todo.id })
+                .assign(value)
+                .write()
+            
+            const foundTodo = _find(this.todos, { id: todo.id})
+            _assign(foundTodo, value)
         },
         deleteTodo () {
             console.log('Delete Todo!')
