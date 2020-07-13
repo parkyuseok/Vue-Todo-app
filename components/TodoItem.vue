@@ -1,5 +1,8 @@
 <template>
-    <div class="todo-item">
+    <div 
+        :class="{ done: done }"
+        class="todo-item"
+    >
 
         <div 
             v-if="isEditMode"
@@ -132,3 +135,23 @@ export default {
     }
 }
 </script>
+
+<style scoped lang="scss">
+// scoped 속성은 
+// 여기서 작성하는 스타일을 전역적으로 사용하지 않고 현재 컴포넌트 내에서만 사용하겠다.
+// 라고 선언하는 속성이다.
+    .todo-item {
+        margin-bottom: 10px;
+        .item__inner {
+            display: flex;
+        }
+        .item__date {
+            font-size: 12px;
+        }
+        &.done {
+            .item__title {
+                text-decoration: line-through;
+            }
+        }
+    }
+</style>
