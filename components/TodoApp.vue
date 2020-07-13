@@ -1,8 +1,8 @@
 <template>
     <!-- template 태그 내부에는 자식요소 1개만 들어갈 수 있어서 div를 만들어서 넣어준다. -->
     <div>
-        <todo-item></todo-item>
-        <todo-creator></todo-creator>
+        <todo-item />
+        <todo-creator @create-todo="createTodo" />
     </div>
 </template>
 
@@ -44,7 +44,7 @@ export default {
             })
             .write()
         },
-        createTodo (title) {
+        createTodo (title) { //this.title이라는 변수를 title 매개변수로 받는다
             const newTodo = {
                 id: cryptoRandomString({ length: 10 }),
                 title, //title: title
@@ -56,7 +56,7 @@ export default {
             this.db
             .get('todos') // lodash
             .push(newTodo) // lodash
-            .wrie() // lowdb
+            .write() // lowdb
         }
     }
 }
