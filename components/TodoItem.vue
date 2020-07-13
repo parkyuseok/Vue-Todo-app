@@ -101,7 +101,7 @@ export default {
             // 수정전 title !== 수정후 title이 같지 않아야만
             if (this.todo.title !== this.editedTitle){
                 this.updateTodo({
-                    titld: this.editedTitle,
+                    title: this.editedTitle,
                     updatedAt: new Date()
                 })
             }

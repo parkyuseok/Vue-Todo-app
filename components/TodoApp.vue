@@ -23,6 +23,7 @@ import cryptoRandomString from 'crypto-random-string' // https://github.com/sind
 import _cloneDeep from 'lodash/cloneDeep'
 import _find from 'lodash/find'
 import _assign from 'lodash/assign'
+import _findIndex from 'lodash/findIndex'
 // 상대경로로 작성해서 가져오는 것
 import TodoCreator from './TodoCreator' //TodoCreator라는 이름으로 가져온다.
 import TodoItem from './TodoItem'
@@ -87,17 +88,23 @@ export default {
             this.todos.push(newTodo)
         },
         updateTodo (todo, value) {
+            console.log("Test")
             this.db
                 .get('todos')
                 .find({ id: todo.id })
                 .assign(value)
                 .write()
             
-            const foundTodo = _find(this.todos, { id: todo.id})
+            const foundTodo = _find(this.todos, { id: todo.id })
             _assign(foundTodo, value)
         },
-        deleteTodo () {
-            console.log('Delete Todo!')
+        deleteTodo (todo) {
+            this.db
+                .get('todos')
+                .remove({ id: todo.id })
+                .write()
+            const foundIndex = _findIndex(this.todos, { id: todo.id })
+            this.$delete(this.todos, foundIndex)
         }
     }
 }
