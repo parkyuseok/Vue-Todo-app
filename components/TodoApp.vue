@@ -20,6 +20,16 @@
                     완료된 항목 ({{ completedCount }})
                 </button>
             </div>
+
+            <div class="actions">
+                <input 
+                    v-model="allDone"
+                    type="checkbox">
+                <button>
+                    완료된 항목 삭제
+                </button>
+            </div>
+
         </div>
 
         <div class="todo-app__list">
@@ -90,6 +100,14 @@ export default {
         },
         completedCount () {
             return this.total - this.activeCount
+        },
+        allDone: {
+            get () {
+                return this.total === this.completedCount && this.total > 0
+            },
+            set (checked) {
+                this.completeAll(checked)
+            }
         }
     },
     // TodoApp.vue라는 컴포넌트가 생성되고 나서 직후에 바로 호출된다.
@@ -159,6 +177,21 @@ export default {
         },
         changeFilter (filter) {
             this.filter = filter
+        },
+        completeAll (checked) {
+            // DB
+            const newTodos = this.db
+                .get('todos')
+                .forEach(todo => {
+                    todo.done = checked 
+                })
+                .write()
+
+            // Local todos
+            // this.todos.forEach(todo => {
+            //     todo.done = checked
+            // })
+            this.todos = _cloneDeep(newTodos) //지금 같은 경우에는 참조관계 때문에 cloneDeep을 쓴다.
         }
     }
 }
