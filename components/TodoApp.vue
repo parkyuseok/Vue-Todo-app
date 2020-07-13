@@ -1,17 +1,43 @@
 <template>
     <!-- template 태그 내부에는 자식요소 1개만 들어갈 수 있어서 div를 만들어서 넣어준다. -->
-    <div>
-        <!-- :todo="todo"는 todo라는 props를 통해 data를 전달하고 있다. -->
-        <todo-item 
-            v-for="todo in todos"
-            :key="todo.id"
-            :todo="todo"
-            @update-todo="updateTodo"
-            @delete-todo="deleteTodo"
-        />
+    <div class="todo-app">
+
+        <div class="todo-app__actions">
+            <div class="filters">
+                <button 
+                    :class="{ active: filter == 'all' }"
+                    @click="changeFilter('all')">
+                        모든 항목 ({{ total }})
+                </button>
+                <button 
+                    :class="{ active: filter == 'active' }"
+                    @click="changeFilter('active')">
+                        해야 할 항목 ({{ activeCount }})
+                </button>
+                <button 
+                    :class="{ active: filter == 'completed' }"
+                    @click="changeFilter('completed')">
+                    완료된 항목 ({{ completedCount }})
+                </button>
+            </div>
+        </div>
+
+        <div class="todo-app__list">
+            <!-- :todo="todo"는 todo라는 props를 통해 data를 전달하고 있다. -->
+            <todo-item 
+                v-for="todo in filteredTodos"
+                :key="todo.id"
+                :todo="todo"
+                @update-todo="updateTodo"
+                @delete-todo="deleteTodo"
+            />
+        </div>
 
         <hr />
-        <todo-creator @create-todo="createTodo" />
+
+        <todo-creator 
+            class="todo-app__creator"
+            @create-todo="createTodo" />
     </div>
 </template>
 
@@ -38,7 +64,32 @@ export default {
     data () {
         return {
             db: null,
-            todos: []
+            todos: [],
+            filter: 'all'
+        }
+    },
+    // 계산된 데이터
+    computed: {
+        filteredTodos () {
+            switch (this.filter) {
+                case 'all':
+                default: //case와 default 일 경우.
+                    return this.todos
+                case 'active': // 해야 할 항목
+                    return this.todos.filter(todo => !todo.done)
+                case 'completed': // 완료된 항목
+                    return this.todos.filter(todo => todo.done)
+            }
+        },
+        total () {
+            return this.todos.length
+        },
+        activeCount () {
+            // todo에 done이 false인 애들만 filter 처리를 하고 그것의 개수를 리턴하면 activeCount가 된다.
+            return this.todos.filter(todo => !todo.done).length
+        },
+        completedCount () {
+            return this.total - this.activeCount
         }
     },
     // TodoApp.vue라는 컴포넌트가 생성되고 나서 직후에 바로 호출된다.
@@ -105,7 +156,17 @@ export default {
                 .write()
             const foundIndex = _findIndex(this.todos, { id: todo.id })
             this.$delete(this.todos, foundIndex)
+        },
+        changeFilter (filter) {
+            this.filter = filter
         }
     }
 }
 </script>
+
+<style scoped lang="scss">
+    button.active {
+        font-weight: bold;
+        color: tomato;
+    }
+</style>
