@@ -1,11 +1,16 @@
 <template>
     <!-- template 태그 내부에는 자식요소 1개만 들어갈 수 있어서 div를 만들어서 넣어준다. -->
     <div>
+        <!-- :todo="todo"는 todo라는 props를 통해 data를 전달하고 있다. -->
         <todo-item 
             v-for="todo in todos"
             :key="todo.id"
             :todo="todo"
+            @update-todo="updateTodo"
+            @delete-todo="deleteTodo"
         />
+
+        <hr />
         <todo-creator @create-todo="createTodo" />
     </div>
 </template>
@@ -75,6 +80,12 @@ export default {
             .get('todos') // lodash
             .push(newTodo) // lodash
             .write() // lowdb
+        },
+        updateTodo () {
+            console.log('Update Todo!')
+        },
+        deleteTodo () {
+            console.log('Delete Todo!')
         }
     }
 }
