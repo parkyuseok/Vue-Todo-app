@@ -25,7 +25,7 @@
                 <input 
                     v-model="allDone"
                     type="checkbox">
-                <button>
+                <button @click="clearCompleted">
                     완료된 항목 삭제
                 </button>
             </div>
@@ -60,6 +60,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _find from 'lodash/find'
 import _assign from 'lodash/assign'
 import _findIndex from 'lodash/findIndex'
+import _forEachRight from 'lodash/forEachRight'
 // 상대경로로 작성해서 가져오는 것
 import TodoCreator from './TodoCreator' //TodoCreator라는 이름으로 가져온다.
 import TodoItem from './TodoItem'
@@ -192,6 +193,31 @@ export default {
             //     todo.done = checked
             // })
             this.todos = _cloneDeep(newTodos) //지금 같은 경우에는 참조관계 때문에 cloneDeep을 쓴다.
+        },
+        clearCompleted () {
+            // this.todos.forEach(todo => {
+            //     if (todo.done) {
+            //         this.deleteTodo(todo)
+            //     }
+            // })
+            // 위에는 앞에서 부터 삭제, 삭제시 문제 발생함 아래는 뒤에서 부터 삭제하는 native code
+            // this.todos
+            //     .reduce((list, todo, index) => {
+            //         if (todo.done) {
+            //             list.push(index)
+            //         }
+            //         return list
+            //     }, [])
+            //     .reverse()
+            //     .forEach(index => {
+            //         this.deleteTodo(this.todos[index])
+            //     })
+
+            _forEachRight(this.todos, todo => {
+                if (todo.done) {
+                    this.deleteTodo(todo)
+                }
+            })
         }
     }
 }
