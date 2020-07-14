@@ -95,12 +95,6 @@ export default {
         TodoCreator,
         TodoItem
     },
-    data () {
-        return {
-            db: null,
-            todos: []
-        }
-    },
     // 계산된 데이터
     computed: {
         filteredTodos () {
@@ -113,16 +107,6 @@ export default {
                 case 'completed': // 완료된 항목
                     return this.todos.filter(todo => todo.done)
             }
-        },
-        total () {
-            return this.todos.length
-        },
-        activeCount () {
-            // todo에 done이 false인 애들만 filter 처리를 하고 그것의 개수를 리턴하면 activeCount가 된다.
-            return this.todos.filter(todo => !todo.done).length
-        },
-        completedCount () {
-            return this.total - this.activeCount
         },
         allDone: {
             get () {
@@ -138,30 +122,6 @@ export default {
         this.initDB()
     },
     methods: {
-        initDB () {
-            const adapter = new LocalStorage('todo-app') //DB
-            // lowdb에 연결
-            this.db = lowdb(adapter)
-
-            // this.db.has('todos')까지는 data가 있는지 없는지 체크만 하는 것 체크된 값을 뽑아 내는 것이 value()
-            const hasTodos = this.db.has('todos').value()
-
-            if (hasTodos) {
-                // this.db.getState().todos는 db에 있는 모든 내용을 가지고 와라. 그 중에 나는 todos만 필요하다
-                //_cloneDeep은 복사행위를 가능하게 해주는 lodash에서 제공하는 메소드이다. 
-                // 사용하는 이유는 todos는 배열이기 때문에 안에 있는 참조관계도 복사하기 때문에 문제가 생기기 때문에 
-                // cloneDeep을 통해서 todos 내부에 있는 모든 참조관계들을 다 제거하고 복사해서 todos에서 활용하겠다는 의미로 깊은 복사를한다.
-                this.todos = _cloneDeep(this.db.getState().todos)
-            } else {
-                // Local DB 초기화
-                this.db
-                    .defaults({
-                        todos: [] //Collection
-                })
-                .write()
-            }
-
-        },
         createTodo (title) { //this.title이라는 변수를 title 매개변수로 받는다
             const newTodo = {
                 id: cryptoRandomString({ length: 10 }),
