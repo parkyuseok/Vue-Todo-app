@@ -4,21 +4,21 @@
 
         <div class="todo-app__actions">
             <div class="filters">
-                <button 
-                    :class="{ active: filter == 'all' }"
-                    @click="changeFilter('all')">
+                <router-link 
+                    to="/todos/all"
+                    tag="button"> <!-- /todos/all 대신에 all만 적어도 동일한 효과 -->
                         모든 항목 ({{ total }})
-                </button>
-                <button 
-                    :class="{ active: filter == 'active' }"
-                    @click="changeFilter('active')">
+                </router-link>
+                <router-link  
+                    to="/todos/active"
+                    tag="button">
                         해야 할 항목 ({{ activeCount }})
-                </button>
-                <button 
-                    :class="{ active: filter == 'completed' }"
-                    @click="changeFilter('completed')">
+                </router-link >
+                <router-link  
+                    to="/todos/completed"
+                    tag="button">
                     완료된 항목 ({{ completedCount }})
-                </button>
+                </router-link >
             </div>
 
             <div class="actions clearfix">
@@ -98,14 +98,13 @@ export default {
     data () {
         return {
             db: null,
-            todos: [],
-            filter: 'all'
+            todos: []
         }
     },
     // 계산된 데이터
     computed: {
         filteredTodos () {
-            switch (this.filter) {
+            switch (this.$route.params.id) {
                 case 'all':
                 default: //case와 default 일 경우.
                     return this.todos
@@ -199,9 +198,6 @@ export default {
             const foundIndex = _findIndex(this.todos, { id: todo.id })
             this.$delete(this.todos, foundIndex)
         },
-        changeFilter (filter) {
-            this.filter = filter
-        },
         completeAll (checked) {
             // DB
             const newTodos = this.db
@@ -259,4 +255,9 @@ export default {
 <style lang="scss">
     // webpack에서 설정한 alias를 통해 절대경로로 작성해줌.
     @import "scss/style"; //SCSS partials라는 개념에 의해 _(언더바) 사라짐
+
+    .filters button.router-link-active {
+        background: royalblue;
+        color: white;
+    }
 </style>
