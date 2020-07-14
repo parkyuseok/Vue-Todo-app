@@ -13,7 +13,7 @@ module.exports = (env, opts) => {
       extensions: ['.js', '.vue'],
       alias: {
         '~': path.join(__dirname),
-        'scss': path.join(__dirname, './scss') //style전용 별칭
+        'scss': path.join(__dirname, './scss') //style 전용 별칭
       }
     },
     // 파일을 읽어들이기 시작하는 진입
