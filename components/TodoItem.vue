@@ -18,11 +18,17 @@
             >
             <div class="item__action">
                 <button 
+                    class="btn btn--primary"
                     key="complete"
-                    @click="editedTodo">완료</button>
+                    @click="editedTodo">
+                    <i class="material-icons">done</i>
+                    </button>
                 <button 
+                    class="btn"
                     key="cancel"
-                    @click="offEditMode">취소</button>
+                    @click="offEditMode">
+                    <i class="material-icons">clear</i>
+                    </button>
             </div>
         </div>
         <div 
@@ -32,10 +38,15 @@
             <!--todo item이 완료된 일인지 해야할 일인지 체크할 체크박스 
             v-model을 통해서 done이라는 computed data 부분을 바인드 시켜주고
             done이 true면 check가 되어있는 상태 false면 체크 X -->
-            <input 
-                v-model="todo.done"
-                type="checkbox"
-            />
+            <label>
+                <input 
+                    v-model="done"
+                    type="checkbox"
+                />
+                <span class="icon">
+                    <i class="material-icons">check</i>
+                </span>
+            </label>
             <div class="item__title-wrap">
                 <div class="item__title">
                     {{ todo.title}}
@@ -45,12 +56,18 @@
                 </div>
             </div>
             <div class="item__actions">
-                <button 
+                <button
+                    class="btn" 
                     key="update"
-                    @click="onEditMode">수정</button>
+                    @click="onEditMode">
+                    <i class="material-icons">edit</i>
+                    </button>
                 <button 
+                    class="btn btn--danger"
                     key="delete"
-                    @click="deleteTodo">삭제</button>
+                    @click="deleteTodo">
+                    <i class="material-icons">delete</i>
+                    </button>
             </div>
         </div>
 
@@ -135,23 +152,3 @@ export default {
     }
 }
 </script>
-
-<style scoped lang="scss">
-// scoped 속성은 
-// 여기서 작성하는 스타일을 전역적으로 사용하지 않고 현재 컴포넌트 내에서만 사용하겠다.
-// 라고 선언하는 속성이다.
-    .todo-item {
-        margin-bottom: 10px;
-        .item__inner {
-            display: flex;
-        }
-        .item__date {
-            font-size: 12px;
-        }
-        &.done {
-            .item__title {
-                text-decoration: line-through;
-            }
-        }
-    }
-</style>
