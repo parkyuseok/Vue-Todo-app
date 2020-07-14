@@ -223,9 +223,6 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-    button.active {
-        font-weight: bold;
-        color: tomato;
-    }
+<style lang="scss">
+    @import "../scss/style"; //SCSS partials라는 개념에 의해 _(언더바) 사라짐
 </style>
