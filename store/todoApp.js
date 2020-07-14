@@ -30,8 +30,17 @@ export default {
         assignDB (state, lowdb) { //lowdb = commit의 두번째 인자로 전달 된 lowdb(adapter)
             state.db = lowdb
         },
+        createDB (state, newTodo) {
+            state.db
+                .get('todos') // lodash
+                .push(newTodo) // lodash
+                .write() // lowdb
+        },
         assignTodos (state, todos) {
             state.todos = todos
+        },
+        pushTodo (state, newTodo) {
+            state.todos.push(newTodo)
         }
     },
 
@@ -64,6 +73,21 @@ export default {
                 })
                 .write()
             }
+        },
+        createTodo ({ state, commit }, title) { //this.title이라는 변수를 title 매개변수로 받는다
+            const newTodo = {
+                id: cryptoRandomString({ length: 10 }),
+                title, //title: title
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                done: false
+            }
+
+            // Create DB
+            commit('createDB', newTodo)
+
+            // Create Client
+            commit('pushTodo', newTodo)
         },
     }
 }

@@ -122,23 +122,6 @@ export default {
         this.initDB()
     },
     methods: {
-        createTodo (title) { //this.title이라는 변수를 title 매개변수로 받는다
-            const newTodo = {
-                id: cryptoRandomString({ length: 10 }),
-                title, //title: title
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                done: false
-            }
-
-            // Create DB
-            this.db
-                .get('todos') // lodash
-                .push(newTodo) // lodash
-                .write() // lowdb
-            // Create Client
-            this.todos.push(newTodo)
-        },
         updateTodo (todo, value) {
             console.log("Test")
             this.db
