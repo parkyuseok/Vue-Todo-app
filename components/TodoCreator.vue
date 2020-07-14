@@ -1,6 +1,8 @@
 <template>
     <div>
-        <button @click="createTodo">추가</button>
+        <button @click="createTodo">
+            <i class="material-icons">add</i>
+        </button>
         <!--[참고] 
             Vue를 작성하는 Code convention 
             1.바인딩된 속성 
@@ -36,6 +38,12 @@ export default {
 
             this.$emit('create-todo', this.title) // this.$emit('eventName', 특정 데이터)
             this.title = '' //초기화하는 코드
+
+            // $nextTick 화면이 렌더링 되는 것을 기다리고 처리한다.
+            this.$nextTick(() => {
+                // window.scrollTo(x, y)
+                window.scrollTo(0, document.body.scrollHeight)
+            })
         }
     }
 }
