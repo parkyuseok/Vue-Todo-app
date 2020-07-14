@@ -84,9 +84,9 @@ import _assign from 'lodash/assign'
 import _findIndex from 'lodash/findIndex'
 import _forEachRight from 'lodash/forEachRight'
 import scrollTo from 'scroll-to'
-// 상대경로로 작성해서 가져오는 것
-import TodoCreator from '../components/TodoCreator' //TodoCreator라는 이름으로 가져온다.
-import TodoItem from '../components/TodoItem'
+// webpack.config.js에서 alias를 통해 절대경로로 작성
+import TodoCreator from '~/components/TodoCreator' //TodoCreator라는 이름으로 가져온다.
+import TodoItem from '~/components/TodoItem'
 
 export default {
     // 외부에서 가져온 컴포넌트를 연결하는 옵션
@@ -257,5 +257,6 @@ export default {
 </script>
 
 <style lang="scss">
-    @import "../scss/style"; //SCSS partials라는 개념에 의해 _(언더바) 사라짐
+    // webpack에서 설정한 alias를 통해 절대경로로 작성해줌.
+    @import "scss/style"; //SCSS partials라는 개념에 의해 _(언더바) 사라짐
 </style>
