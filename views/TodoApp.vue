@@ -85,8 +85,8 @@ import _findIndex from 'lodash/findIndex'
 import _forEachRight from 'lodash/forEachRight'
 import scrollTo from 'scroll-to'
 // 상대경로로 작성해서 가져오는 것
-import TodoCreator from './TodoCreator' //TodoCreator라는 이름으로 가져온다.
-import TodoItem from './TodoItem'
+import TodoCreator from '../components/TodoCreator' //TodoCreator라는 이름으로 가져온다.
+import TodoItem from '../components/TodoItem'
 
 export default {
     // 외부에서 가져온 컴포넌트를 연결하는 옵션
