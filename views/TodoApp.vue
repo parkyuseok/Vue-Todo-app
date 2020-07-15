@@ -75,7 +75,6 @@
 
 <script>
 // 일반적으로 node_modules에서 가져오는 것은 상단에 배치하는 것이 좋다.(상대 경로랑 구분)
-import cryptoRandomString from 'crypto-random-string' // https://github.com/sindresorhus/crypto-random-string
 import _cloneDeep from 'lodash/cloneDeep'
 import _findIndex from 'lodash/findIndex'
 import _forEachRight from 'lodash/forEachRight'
