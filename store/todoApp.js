@@ -1,4 +1,9 @@
-// https://vuex.vuejs.org/kr/guide/modules.html#%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4
+import lowdb from 'lowdb' // https://github.com/typicode/lowdb
+import LocalStorage from 'lowdb/adapters/LocalStorage'
+import cryptoRandomString from 'crypto-random-string' // https://github.com/sindresorhus/crypto-random-string
+import _find from 'lodash/find'
+import _assign from 'lodash/assign'
+
 export default {
     // todoApp.js를 독립적으로 돌아가길 원한다면 namespaced: true
     namespaced: true,
@@ -36,8 +41,18 @@ export default {
                 .push(newTodo) // lodash
                 .write() // lowdb
         },
+        updateDB (state, { todo, value }) {
+            state.db
+                .get('todos')
+                .find({ id: todo.id })
+                .assign(value)
+                .write()
+        },
         assignTodos (state, todos) {
             state.todos = todos
+        },
+        assignTodo (state, { foundTodo, value }) {
+            _assign(foundTodo, value)
         },
         pushTodo (state, newTodo) {
             state.todos.push(newTodo)
@@ -89,5 +104,12 @@ export default {
             // Create Client
             commit('pushTodo', newTodo)
         },
+        updateTodo ({ state, commit }, { todo, value }) {
+            //Update DB
+            commit('updateDB', { todo, value })
+
+            const foundTodo = _find(state.todos, { id: todo.id })
+            commit('assignTodo', { foundTodo, value })
+        }
     }
 }

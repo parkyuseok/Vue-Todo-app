@@ -75,12 +75,8 @@
 
 <script>
 // 일반적으로 node_modules에서 가져오는 것은 상단에 배치하는 것이 좋다.(상대 경로랑 구분)
-import lowdb from 'lowdb' // https://github.com/typicode/lowdb
-import LocalStorage from 'lowdb/adapters/LocalStorage'
 import cryptoRandomString from 'crypto-random-string' // https://github.com/sindresorhus/crypto-random-string
 import _cloneDeep from 'lodash/cloneDeep'
-import _find from 'lodash/find'
-import _assign from 'lodash/assign'
 import _findIndex from 'lodash/findIndex'
 import _forEachRight from 'lodash/forEachRight'
 import scrollTo from 'scroll-to'
@@ -120,19 +116,15 @@ export default {
     // TodoApp.vue라는 컴포넌트가 생성되고 나서 직후에 바로 호출된다.
     created () {
         this.initDB()
+        
+        // vuex를 설치하면 store 객체에 접근할 수 있다.
+        // todoApp.js에서 .js는 생략하고 모듈이름만 적어준다.
+        // this.$store.dispatch('todoApp/updateTodo', {
+        //     todo: todo,
+        //     value
+        // })
     },
     methods: {
-        updateTodo (todo, value) {
-            console.log("Test")
-            this.db
-                .get('todos')
-                .find({ id: todo.id })
-                .assign(value)
-                .write()
-            
-            const foundTodo = _find(this.todos, { id: todo.id })
-            _assign(foundTodo, value)
-        },
         deleteTodo (todo) {
             this.db
                 .get('todos')
