@@ -29,7 +29,7 @@ export default {
       commit('someMutation', payload)
     },
     someAction2 (context, payload) {
-      context.commit('someMutation')
+      context.commit('someMutation') //mutations 를 이용하고 싶으면 commit을 사용한다.
       context.dispatch('someAction', payload) // actions를 이용하고 싶으면 dispatch를 사용한다.
     }
   }
