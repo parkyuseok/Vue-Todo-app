@@ -61,8 +61,7 @@
             <todo-item 
                 v-for="todo in filteredTodos"
                 :key="todo.id"
-                :todo="todo"
-            />
+                :todo="todo" />
         </div>
 
         <todo-creator class="todo-app__creator" />
@@ -90,21 +89,11 @@ export default {
             'todos'
         ]),
         ...mapGetters('todoApp', [
+            'filteredTodos',
             'total',
             'activeCount',
             'completedCount'
         ]),
-        filteredTodos () {
-            switch (this.$route.params.id) {
-                case 'all':
-                default: //case와 default 일 경우.
-                    return this.todos
-                case 'active': // 해야 할 항목
-                    return this.todos.filter(todo => !todo.done)
-                case 'completed': // 완료된 항목
-                    return this.todos.filter(todo => todo.done)
-            }
-        },
         allDone: {
             get () {
                 return this.total === this.completedCount && this.total > 0
@@ -114,11 +103,21 @@ export default {
             }
         }
     },
+    watch: {
+        $route () {
+            // state.filter = this.$route.params.id
+            // this.$store.commit('todoApp/updateFilter', this.$route.params.id)
+            this.updateFilter(this.$route.params.id) // ...mapMutations
+        }
+    },
     // TodoApp.vue라는 컴포넌트가 생성되고 나서 직후에 바로 호출된다.
     created () {
         this.initDB()
     },
     methods: {
+        ...mapMutations('todoApp', [
+            'updateFilter'
+        ]),
         ...mapActions('todoApp', [
             'initDB',
             'completeAll',

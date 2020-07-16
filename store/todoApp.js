@@ -15,11 +15,23 @@ export default {
     // 저장소에서 관리되는 Data (data는 참조관계 문제 때문에 함수로 작성)
     state: () => ({
         db: null,
-        todos: []
+        todos: [],
+        filter: 'all'
     }),
     
     // state에 있는 data를 뭔가 계산해서 사용할 때 (Computed)
     getters: {
+        filteredTodos (state) {
+            switch (state.filter) {
+                case 'all':
+                default: //case와 default 일 경우.
+                    return state.todos
+                case 'active': // 해야 할 항목
+                    return state.todos.filter(todo => !todo.done)
+                case 'completed': // 완료된 항목
+                    return state.todos.filter(todo => todo.done)
+            }
+        },
         total (state) {
             return state.todos.length
         },
@@ -72,6 +84,9 @@ export default {
         },
         updateTodo (state, { todo, key, value }) {
             todo[key] = value
+        },
+        updateFilter (state, filter) {
+            state.filter = filter
         }
     },
 
