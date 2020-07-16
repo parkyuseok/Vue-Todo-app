@@ -70,9 +70,8 @@
 </template>
 
 <script>
-// 일반적으로 node_modules에서 가져오는 것은 상단에 배치하는 것이 좋다.(상대 경로랑 구분)
+import { mapState, mapGetters } from 'vuex' // store에 있는 state와 getters를 가져와서 computed 속성에 매핑한다.
 import scrollTo from 'scroll-to'
-// webpack.config.js에서 alias를 통해 절대경로로 작성
 import TodoCreator from '~/components/TodoCreator' //TodoCreator라는 이름으로 가져온다.
 import TodoItem from '~/components/TodoItem'
 
@@ -85,6 +84,16 @@ export default {
     },
     // 계산된 데이터
     computed: {
+        // Halpers
+        // 전개 연산자
+        ...mapState('todoApp', [
+            'todos'
+        ]),
+        ...mapGetters('todoApp', [
+            'total',
+            'activeCount',
+            'completedCount'
+        ]),
         filteredTodos () {
             switch (this.$route.params.id) {
                 case 'all':
