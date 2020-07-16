@@ -11,6 +11,7 @@ module.exports = (env, opts) => {
     // 가져오기 확장자 생략 가능
     resolve: {
       extensions: ['.js', '.vue'],
+      // 절대 경로 별칭 설정
       alias: {
         '~': path.join(__dirname),
         'scss': path.join(__dirname, './scss') // style 전용 별칭
@@ -27,7 +28,7 @@ module.exports = (env, opts) => {
     // 결과물(번들)을 반환하는 설정
     // `[name]`은 `entry`의 Key 이름, `app`
     output: {
-      filename: '[name].js', // app.js
+      filename: '[name].js',
       path: path.join(__dirname, 'dist')
     },
     // 모듈 처리 방식을 설정
@@ -38,26 +39,28 @@ module.exports = (env, opts) => {
           use: 'vue-loader'
         },
         {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          use: 'babel-loader'
-        },
-        {
           test: /\.css$/,
           use: [
-            'vue-style-loader',
-            'css-loader',
-            'postcss-loader'
+            'vue-style-loader', // 1st
+            'css-loader', // 2nd
+            'postcss-loader' // 3rd
           ]
         },
         {
           test: /\.scss$/,
           use: [
-            'vue-style-loader',
-            'css-loader',
-            'postcss-loader',
-            'sass-loader'
+            'vue-style-loader', // 1st
+            'css-loader', // 2nd
+            'postcss-loader', // 3rd
+            'sass-loader' // 4th
           ]
+        },
+        {
+          test: /\.?js$/,
+          exclude: /node_modules/, // 제외할
+          use: {
+            loader: 'babel-loader'
+          }
         }
       ]
     },
@@ -68,14 +71,12 @@ module.exports = (env, opts) => {
       }),
       new VueLoaderPlugin(),
       // assets 디렉터리의 내용을 `dist` 디렉터리에 복사합니다.
-      new CopyPlugin({
-        patterns: [
+      new CopyPlugin([
           {
             from: 'assets/',
             to: ''
           }
-        ]
-      })
+      ])
     ]
   }
 
@@ -90,7 +91,8 @@ module.exports = (env, opts) => {
         hot: true
       }
     })
-    // opts.mode === 'production'
+
+  // opts.mode === 'production'
   } else {
     return merge(config, {
       // 용량이 적은 방식
