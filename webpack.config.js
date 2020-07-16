@@ -71,12 +71,14 @@ module.exports = (env, opts) => {
       }),
       new VueLoaderPlugin(),
       // assets 디렉터리의 내용을 `dist` 디렉터리에 복사합니다.
-      new CopyPlugin([
+      new CopyPlugin({
+        patterns: [
           {
             from: 'assets/',
             to: ''
           }
-      ])
+        ]
+      })
     ]
   }
 
