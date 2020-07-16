@@ -17,30 +17,30 @@ Vue.use(VueRouter)
 // "component"는 `Vue.extend()`를 통해 만들어진
 // 실제 컴포넌트 생성자이거나 컴포넌트 옵션 객체입니다.
 const routes = [
-    //config(구성)
-    {
-        path: '/', // /가 하는 역할은 "이 페이지의 루트 페이지이다(최상위 페이지)"
-        component: Home 
-    },
-    {
-        path: '/about',
-        component: About
-    },
-    {
-        path: '/todos',
-        redirect: '/todos/all',
-        component: TodoApp,
-        children: [
-            {
-                name: 'todos-filter',
-                path: ':id' // id 라는 :(이름의 parameter를 받을 것이다.)
-            }
-        ]
-    }
+  // config(구성)
+  {
+    path: '/', // /가 하는 역할은 "이 페이지의 루트 페이지이다(최상위 페이지)"
+    component: Home
+  },
+  {
+    path: '/about',
+    component: About
+  },
+  {
+    path: '/todos',
+    redirect: '/todos/all',
+    component: TodoApp,
+    children: [
+      {
+        name: 'todos-filter',
+        path: ':id' // id 라는 :(이름의 parameter를 받을 것이다.)
+      }
+    ]
+  }
 ]
 
 // 3. `routes` 옵션과 함께 router 인스턴스를 만드세요.
 // 추가 옵션을 여기서 전달해야합니다.
 export default new VueRouter({
-    routes // `routes: routes`의 줄임
+  routes // `routes: routes`의 줄임
 })

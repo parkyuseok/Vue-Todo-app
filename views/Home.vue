@@ -11,8 +11,8 @@
             <!-- 네비게이션을 위해 router-link 컴포넌트를 사용합니다. -->
             <!-- 구체적인 속성은 `to` prop을 이용합니다. -->
             <!-- 기본적으로 `<router-link>`는 `<a>` 태그로 렌더링됩니다.-->
-            <router-link 
-                to="/todos" 
+            <router-link
+                to="/todos"
                 tag="h2">
                     Todo App
             </router-link>
@@ -20,7 +20,7 @@
     </section>
 </template>
 
-// <script>
+<script>
 // export default {
 //     methods: {
 //         toAbout () {

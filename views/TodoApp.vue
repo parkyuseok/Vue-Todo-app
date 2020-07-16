@@ -4,17 +4,17 @@
 
         <div class="todo-app__actions">
             <div class="filters">
-                <router-link 
+                <router-link
                     to="/todos/all"
                     tag="button"> <!-- /todos/all 대신에 all만 적어도 동일한 효과 -->
                         모든 항목 ({{ total }})
                 </router-link>
-                <router-link  
+                <router-link
                     to="/todos/active"
                     tag="button">
                         해야 할 항목 ({{ activeCount }})
                 </router-link >
-                <router-link  
+                <router-link
                     to="/todos/completed"
                     tag="button">
                     완료된 항목 ({{ completedCount }})
@@ -24,7 +24,7 @@
             <div class="actions clearfix">
                 <div class="float--left">
                     <label>
-                        <input 
+                        <input
                             v-model="allDone"
                             type="checkbox"
                         />
@@ -34,19 +34,19 @@
                     </label>
                 </div>
                 <div class="float--right clearfix">
-                    <button 
+                    <button
                         class="btn float--left"
                         @click="scrollToTop"
                     >
                         <i class="material-icons">expand_less</i>
                     </button>
-                    <button 
+                    <button
                         class="btn float--left"
                         @click="scrollToBottom"
                     >
                         <i class="material-icons">expand_more</i>
                     </button>
-                    <button 
+                    <button
                         class="btn btn--danger float--left"
                         @click="clearCompleted">
                             <i class="material-icons">delete_sweep</i>
@@ -58,7 +58,7 @@
 
         <div class="todo-app__list">
             <!-- :todo="todo"는 todo라는 props를 통해 data를 전달하고 있다. -->
-            <todo-item 
+            <todo-item
                 v-for="todo in filteredTodos"
                 :key="todo.id"
                 :todo="todo" />
@@ -71,69 +71,69 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex' // store에 있는 state와 getters를 가져와서 computed 속성에 매핑한다.
 import scrollTo from 'scroll-to'
-import TodoCreator from '~/components/TodoCreator' //TodoCreator라는 이름으로 가져온다.
+import TodoCreator from '~/components/TodoCreator' // TodoCreator라는 이름으로 가져온다.
 import TodoItem from '~/components/TodoItem'
 
 export default {
-    // 외부에서 가져온 컴포넌트를 연결하는 옵션
-    components: {
-        // 가져온 컴포넌트를 연결해준다.
-        TodoCreator,
-        TodoItem
-    },
-    // 계산된 데이터
-    computed: {
-        // Halpers
-        // 전개 연산자
-        ...mapState('todoApp', [
-            'todos'
-        ]),
-        ...mapGetters('todoApp', [
-            'filteredTodos',
-            'total',
-            'activeCount',
-            'completedCount'
-        ]),
-        allDone: {
-            get () {
-                return this.total === this.completedCount && this.total > 0
-            },
-            set (checked) {
-                this.completeAll(checked)
-            }
-        }
-    },
-    watch: {
-        $route () {
-            // state.filter = this.$route.params.id
-            // this.$store.commit('todoApp/updateFilter', this.$route.params.id)
-            this.updateFilter(this.$route.params.id) // ...mapMutations
-        }
-    },
-    // TodoApp.vue라는 컴포넌트가 생성되고 나서 직후에 바로 호출된다.
-    created () {
-        this.initDB()
-    },
-    methods: {
-        ...mapMutations('todoApp', [
-            'updateFilter'
-        ]),
-        ...mapActions('todoApp', [
-            'initDB',
-            'completeAll',
-            'clearCompleted'
-        ]),
-        scrollToTop () {
-            scrollTo(0, 0, {
-                ease: 'linear',
-            })
-        },
-        scrollToBottom () {
-            scrollTo(0, document.body.scrollHeight, {
-                ease: 'linear',
-            })
-        }
+  // 외부에서 가져온 컴포넌트를 연결하는 옵션
+  components: {
+    // 가져온 컴포넌트를 연결해준다.
+    TodoCreator,
+    TodoItem
+  },
+  // 계산된 데이터
+  computed: {
+    // Halpers
+    // 전개 연산자
+    ...mapState('todoApp', [
+      'todos'
+    ]),
+    ...mapGetters('todoApp', [
+      'filteredTodos',
+      'total',
+      'activeCount',
+      'completedCount'
+    ]),
+    allDone: {
+      get () {
+        return this.total === this.completedCount && this.total > 0
+      },
+      set (checked) {
+        this.completeAll(checked)
+      }
     }
+  },
+  watch: {
+    $route () {
+      // state.filter = this.$route.params.id
+      // this.$store.commit('todoApp/updateFilter', this.$route.params.id)
+      this.updateFilter(this.$route.params.id) // ...mapMutations
+    }
+  },
+  // TodoApp.vue라는 컴포넌트가 생성되고 나서 직후에 바로 호출된다.
+  created () {
+    this.initDB()
+  },
+  methods: {
+    ...mapMutations('todoApp', [
+      'updateFilter'
+    ]),
+    ...mapActions('todoApp', [
+      'initDB',
+      'completeAll',
+      'clearCompleted'
+    ]),
+    scrollToTop () {
+      scrollTo(0, 0, {
+        ease: 'linear'
+      })
+    },
+    scrollToBottom () {
+      scrollTo(0, document.body.scrollHeight, {
+        ease: 'linear'
+      })
+    }
+  }
 }
 </script>
 
