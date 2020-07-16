@@ -8,7 +8,7 @@ new Vue({
   // Vue에 연결
   router,
   store,
-  render: h => h(App) // https://goodteacher.tistory.com/85
+  render: h => h(App) // https://css-tricks.com/what-does-the-h-stand-for-in-vues-render-method/
 })
 
 // webpack.config.js에서 entry를 main.js로 설정하였고 plugins에서 index.html을 설정해줌
