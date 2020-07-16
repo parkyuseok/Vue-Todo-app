@@ -1,38 +1,40 @@
 <template>
-    <!-- template 태그 내부에는 자식요소 1개만 들어갈 수 있어서 div를 만들어서 넣어준다. -->
     <div class="todo-app">
 
         <div class="todo-app__actions">
+            <!-- FILTERS -->
             <div class="filters">
                 <router-link
-                    to="/todos/all"
-                    tag="button"> <!-- /todos/all 대신에 all만 적어도 동일한 효과 -->
-                        모든 항목 ({{ total }})
+                    to="all"
+                    tag="button"
+                >
+                  모든 항목 ({{ total }})
                 </router-link>
                 <router-link
-                    to="/todos/active"
-                    tag="button">
-                        해야 할 항목 ({{ activeCount }})
+                    to="active"
+                    tag="button"
+                >
+                  해야 할 항목 ({{ activeCount }})
                 </router-link >
                 <router-link
-                    to="/todos/completed"
-                    tag="button">
-                    완료된 항목 ({{ completedCount }})
+                    to="completed"
+                    tag="button"
+                >
+                  완료된 항목 ({{ completedCount }})
                 </router-link >
             </div>
 
+            <!-- ACTIONS -->
             <div class="actions clearfix">
-                <div class="float--left">
-                    <label>
-                        <input
-                            v-model="allDone"
-                            type="checkbox"
-                        />
-                        <span class="icon">
-                            <i class="material-icons">done_all</i>
-                        </span>
-                    </label>
-                </div>
+                <label class="float--left">
+                    <input
+                        v-model="allDone"
+                        type="checkbox"
+                    />
+                    <span class="icon">
+                        <i class="material-icons">done_all</i>
+                    </span>
+                </label>
                 <div class="float--right clearfix">
                     <button
                         class="btn float--left"
@@ -48,46 +50,46 @@
                     </button>
                     <button
                         class="btn btn--danger float--left"
-                        @click="clearCompleted">
-                            <i class="material-icons">delete_sweep</i>
+                        @click="clearCompleted"
+                    >
+                      <i class="material-icons">delete_sweep</i>
                     </button>
                 </div>
             </div>
-
         </div>
 
+        <!-- LIST -->
         <div class="todo-app__list">
-            <!-- :todo="todo"는 todo라는 props를 통해 data를 전달하고 있다. -->
             <todo-item
                 v-for="todo in filteredTodos"
                 :key="todo.id"
-                :todo="todo" />
+                :todo="todo"
+            />
         </div>
 
+        <!-- INSERT -->
         <todo-creator class="todo-app__creator" />
+
     </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex' // store에 있는 state와 getters를 가져와서 computed 속성에 매핑한다.
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import scrollTo from 'scroll-to'
-import TodoCreator from '~/components/TodoCreator' // TodoCreator라는 이름으로 가져온다.
+
+import TodoCreator from '~/components/TodoCreator'
 import TodoItem from '~/components/TodoItem'
 
 export default {
-  // 외부에서 가져온 컴포넌트를 연결하는 옵션
+  name: 'TodoApp',
   components: {
-    // 가져온 컴포넌트를 연결해준다.
     TodoCreator,
     TodoItem
   },
-  // 계산된 데이터
   computed: {
-    // Halpers
-    // 전개 연산자
-    ...mapState('todoApp', [
-      'todos'
-    ]),
+    // ...mapState('todoApp', [
+    //   'todos'
+    // ]),
     ...mapGetters('todoApp', [
       'filteredTodos',
       'total',
@@ -96,6 +98,7 @@ export default {
     ]),
     allDone: {
       get () {
+        // 전체 항목 개수와 완료된 항목 개수가 일치하고 항목 개수가 1개 이상인 경우.
         return this.total === this.completedCount && this.total > 0
       },
       set (checked) {
@@ -105,12 +108,9 @@ export default {
   },
   watch: {
     $route () {
-      // state.filter = this.$route.params.id
-      // this.$store.commit('todoApp/updateFilter', this.$route.params.id)
-      this.updateFilter(this.$route.params.id) // ...mapMutations
+      this.updateFilter(this.$route.params.id)
     }
   },
-  // TodoApp.vue라는 컴포넌트가 생성되고 나서 직후에 바로 호출된다.
   created () {
     this.initDB()
   },
@@ -138,8 +138,7 @@ export default {
 </script>
 
 <style lang="scss">
-    // webpack에서 설정한 alias를 통해 절대경로로 작성해줌.
-    @import "scss/style"; //SCSS partials라는 개념에 의해 _(언더바) 사라짐
+    @import "scss/style";
 
     .filters button.router-link-active {
         background: royalblue;
