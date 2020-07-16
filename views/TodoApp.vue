@@ -62,14 +62,10 @@
                 v-for="todo in filteredTodos"
                 :key="todo.id"
                 :todo="todo"
-                @update-todo="updateTodo"
-                @delete-todo="deleteTodo"
             />
         </div>
 
-        <todo-creator 
-            class="todo-app__creator"
-            @create-todo="createTodo" />
+        <todo-creator class="todo-app__creator" />
     </div>
 </template>
 

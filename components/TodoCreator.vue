@@ -36,7 +36,8 @@ export default {
                 return
             }
 
-            this.$emit('create-todo', this.title) // this.$emit('eventName', 특정 데이터)
+            // this.$emit('create-todo', this.title), action에 접글할 때 스토어에 디스패치, mutation에 접근할 때 스토어에 있는 커밋
+            this.$store.dispatch('todoApp/createTodo', this.title)
             this.title = '' //초기화하는 코드
 
             // $nextTick 화면이 렌더링 되는 것을 기다리고 처리한다.
