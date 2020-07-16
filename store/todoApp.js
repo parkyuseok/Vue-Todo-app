@@ -1,8 +1,12 @@
+import Vue from 'vue'
 import lowdb from 'lowdb' // https://github.com/typicode/lowdb
 import LocalStorage from 'lowdb/adapters/LocalStorage'
 import cryptoRandomString from 'crypto-random-string' // https://github.com/sindresorhus/crypto-random-string
 import _find from 'lodash/find'
 import _assign from 'lodash/assign'
+import _cloneDeep from 'lodash/cloneDeep'
+import _findIndex from 'lodash/findIndex'
+import _forEachRight from 'lodash/forEachRight'
 
 export default {
     // todoApp.js를 독립적으로 돌아가길 원한다면 namespaced: true
@@ -48,6 +52,12 @@ export default {
                 .assign(value)
                 .write()
         },
+        deleteDB (state, todo) {
+            state.db
+                .get('todos')
+                .remove({ id: todo.id })
+                .write()
+        },
         assignTodos (state, todos) {
             state.todos = todos
         },
@@ -56,6 +66,12 @@ export default {
         },
         pushTodo (state, newTodo) {
             state.todos.push(newTodo)
+        },
+        deleteTodo (state, foundIndex) {
+            Vue.delete(state.todos, foundIndex)
+        },
+        updateTodo (state, { todo, key, value }) {
+            todo[key] = value
         }
     },
 
@@ -110,6 +126,39 @@ export default {
 
             const foundTodo = _find(state.todos, { id: todo.id })
             commit('assignTodo', { foundTodo, value })
-        }
+        },
+        deleteTodo ({ state, commit }, todo) {
+            // Delete DB
+            commit('deleteDB', todo)
+
+            const foundIndex = _findIndex(state.todos, { id: todo.id })
+            // Delete Client
+            commit('deleteTodo', foundIndex)
+        },
+        completeAll ({ state, commit}, checked) {
+            // DB
+            const newTodos = state.db
+                .get('todos')
+                .forEach(todo => {
+                    // todo.done = checked 
+                    commit('updateTodo', {
+                        todo,
+                        key: 'done',
+                        value: checked
+                    })
+                })
+                .write()
+
+            state.todos = _cloneDeep(newTodos)
+        },
+        clearCompleted ({ state, dispatch }) {
+
+            _forEachRight(state.todos, todo => {
+                if (todo.done) {
+                    // state.deleteTodo(todo)
+                    dispatch('deleteTodo', todo)
+                }
+            })
+        },
     }
 }

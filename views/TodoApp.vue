@@ -75,9 +75,6 @@
 
 <script>
 // 일반적으로 node_modules에서 가져오는 것은 상단에 배치하는 것이 좋다.(상대 경로랑 구분)
-import _cloneDeep from 'lodash/cloneDeep'
-import _findIndex from 'lodash/findIndex'
-import _forEachRight from 'lodash/forEachRight'
 import scrollTo from 'scroll-to'
 // webpack.config.js에서 alias를 통해 절대경로로 작성
 import TodoCreator from '~/components/TodoCreator' //TodoCreator라는 이름으로 가져온다.
@@ -124,54 +121,6 @@ export default {
         // })
     },
     methods: {
-        deleteTodo (todo) {
-            this.db
-                .get('todos')
-                .remove({ id: todo.id })
-                .write()
-            const foundIndex = _findIndex(this.todos, { id: todo.id })
-            this.$delete(this.todos, foundIndex)
-        },
-        completeAll (checked) {
-            // DB
-            const newTodos = this.db
-                .get('todos')
-                .forEach(todo => {
-                    todo.done = checked 
-                })
-                .write()
-
-            // Local todos
-            // this.todos.forEach(todo => {
-            //     todo.done = checked
-            // })
-            this.todos = _cloneDeep(newTodos) //지금 같은 경우에는 참조관계 때문에 cloneDeep을 쓴다.
-        },
-        clearCompleted () {
-            // this.todos.forEach(todo => {
-            //     if (todo.done) {
-            //         this.deleteTodo(todo)
-            //     }
-            // })
-            // 위에는 앞에서 부터 삭제, 삭제시 문제 발생함 아래는 뒤에서 부터 삭제하는 native code
-            // this.todos
-            //     .reduce((list, todo, index) => {
-            //         if (todo.done) {
-            //             list.push(index)
-            //         }
-            //         return list
-            //     }, [])
-            //     .reverse()
-            //     .forEach(index => {
-            //         this.deleteTodo(this.todos[index])
-            //     })
-
-            _forEachRight(this.todos, todo => {
-                if (todo.done) {
-                    this.deleteTodo(todo)
-                }
-            })
-        },
         scrollToTop () {
             scrollTo(0, 0, {
                 ease: 'linear',
