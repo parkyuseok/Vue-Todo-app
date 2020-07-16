@@ -78,15 +78,11 @@ export default {
     // Methods
     // 비동기를 포함한 일반 로직을 작성할 때 사용(state 변경 X)
     actions: {
-        // context에는 state, getters, mutations, actions 등 참조관계에 접근할 수 있는 객체들이 들어있다.
-        // const { state } = context,
         initDB ({ state, commit }) { //commit을 통해 mutaion에 접근.
             const adapter = new LocalStorage('todo-app') //DB
-            // lowdb에 연결
             // state.db = lowdb(adapter)
             commit('assignDB', lowdb(adapter)) //mutations를 실해하는 개념.
 
-            // state.db.has('todos')까지는 data가 있는지 없는지 체크만 하는 것 체크된 값을 뽑아 내는 것이 value()
             const hasTodos = state.db.has('todos').value()
 
             if (hasTodos) {

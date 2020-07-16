@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex' // store에 있는 state와 getters를 가져와서 computed 속성에 매핑한다.
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex' // store에 있는 state와 getters를 가져와서 computed 속성에 매핑한다.
 import scrollTo from 'scroll-to'
 import TodoCreator from '~/components/TodoCreator' //TodoCreator라는 이름으로 가져온다.
 import TodoItem from '~/components/TodoItem'
@@ -117,15 +117,13 @@ export default {
     // TodoApp.vue라는 컴포넌트가 생성되고 나서 직후에 바로 호출된다.
     created () {
         this.initDB()
-        
-        // vuex를 설치하면 store 객체에 접근할 수 있다.
-        // todoApp.js에서 .js는 생략하고 모듈이름만 적어준다.
-        // this.$store.dispatch('todoApp/updateTodo', {
-        //     todo: todo,
-        //     value
-        // })
     },
     methods: {
+        ...mapActions('todoApp', [
+            'initDB',
+            'completeAll',
+            'clearCompleted'
+        ]),
         scrollToTop () {
             scrollTo(0, 0, {
                 ease: 'linear',
